@@ -21,6 +21,7 @@ void solve(){
         b+='(';
         b+=')';
     }
+    //hi
 
     if(str=="()") cout<<"NO"<<nn;
     else{
