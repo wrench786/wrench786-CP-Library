@@ -9,39 +9,39 @@ using namespace std;
 
 // check int overflow4
 void solve(){
-    ll m, k, a, b;
-    cin>>m>>k>>a>>b;
+    int n,m;
+    cin>>n>>m;
 
-    ll ss = min(m/k, b);
-    b-=ss;
+    vector<int>vec(n+1),presum(n+1,0);
+    for(int i=1;i<=n;i++){
+        cin>>vec[i];
 
-    ll ans = ss*k;
-    ll rem = m - ans;
+        presum[i] = presum[i-1]+vec[i];
+    }
 
-    ll cost=0;
+    int sum = presum[k];
 
-    if(rem-a>0){
-        if(rem<k)cost+= (rem-a);
-        else{
-            ll dum = (rem-a)/k;
-            
-            cost = dum;
-            rem-=dum*k;
+    priority_queue<pair<int, int>>pq;
+    pq.push({vec[k],k});
 
-            if(rem>a){
-                if(rem>k){
-                    rem-=k;
-                    rem-=a;
-                    cost+=rem;
-                }
-                else{
-                    rem-=a;
-                    cost+=rem;
-                }
-            }
+    int cost=0;
+    for(int i=k-1;i>=1;i--){
+        while(presum[i]<sum && pq.size()){
+            cost++;
+            pair<int,int>a  = pq.top();
+            pq.pop();
+
+            sum-= 2*a.first;
+            vec[a.second] = -a.first;
         }
     }
-    cout<<cost<<nn;
+    for(int i=1;i<=n;i++){
+        presum[i] = presum[i-1]+vec[i];
+    }
+
+    for(int i=k+1;i<=n;i++){
+        while(presum[i]<sum && )
+    }
 }
  
 int main()
