@@ -9,53 +9,7 @@ using namespace std;
 
 // check int overflow4
 void solve(){
-    ll n,m;
-    cin>>n>>m;
 
-    vector<ll>vec(n+1);
-    for(ll i=1;i<=n;i++){
-        cin>>vec[i];
-    }
-
-    ll cost=0;
-    priority_queue<ll>pq;
-
-    ll sum=0;
-    for(ll i=m;i>=2;i--){
-        sum+=vec[i];
-
-        if(vec[i]<=0) continue;
-
-        pq.push(vec[i]);
-
-        while(sum>0 && pq.size()){
-            ll x = pq.top();
-            pq.pop();
-
-            sum-= (2*x);
-            cost++;
-        }
-    }
-
-    while(!pq.empty()) pq.pop();
-
-    sum=0;
-    for(ll i=m+1;i<=n;i++){
-        sum+=vec[i];
-
-        if(vec[i]>=0) continue;
-
-        pq.push(-vec[i]);
-
-        while(sum<0 && pq.size()){
-            ll x = pq.top();
-            pq.pop();
-
-            sum+= (2*x);
-            cost++;
-        }
-    }
-    cout<<cost<<nn;
 }
  
 int main()
