@@ -7,50 +7,20 @@ typedef unsigned long long ull;
 
 using namespace std;
 
-// check int overflow4
+// check int overflow
 void solve(){
-    int n,m;
-    cin>>n>>m;
 
-    vector<int>vec(n+1),presum(n+1,0);
-    for(int i=1;i<=n;i++){
-        cin>>vec[i];
-
-        presum[i] = presum[i-1]+vec[i];
-    }
-
-    int sum = presum[k];
-
-    priority_queue<pair<int, int>>pq;
-    pq.push({vec[k],k});
-
-    int cost=0;
-    for(int i=k-1;i>=1;i--){
-        while(presum[i]<sum && pq.size()){
-            cost++;
-            pair<int,int>a  = pq.top();
-            pq.pop();
-
-            sum-= 2*a.first;
-            vec[a.second] = -a.first;
-        }
-    }
-    for(int i=1;i<=n;i++){
-        presum[i] = presum[i-1]+vec[i];
-    }
-
-    for(int i=k+1;i<=n;i++){
-        while(presum[i]<sum && )
-    }
 }
  
 int main()
 {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
  
     // freopen("reduce.in", "r", stdin);
     // freopen("reduce.out", "w", stdout);
     int tc=1;
-    cin>>tc;
+    //cin>>tc;
     //scanf("%d",&tc);  
     while(tc--){
         solve();
