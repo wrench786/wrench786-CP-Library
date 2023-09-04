@@ -11,32 +11,13 @@ using namespace std;
 
 int spf[N];
 
-void precal(){
+void solve(){
     for(int i=1;i<N;i++) spf[i]=i;
 
     for(int i=2;i<N;i++){
         for(int j=i;j<N;j+=i){
             spf[j] = min(spf[j],i);
         }
-    }
-}
-
-void solve(){
-    precal();
-
-    int n;
-    while(cin>>n && n!=0){
-        int dum = n;
-        int cnt=0;
-
-        while(n>1){
-            int x = spf[n];
-            cnt++;
-            while(n%x==0){
-                n/=x;
-            }
-        }
-        cout<<dum<<" : "<<cnt<<nn;
     }
 }
 
