@@ -29,13 +29,10 @@ void solve(){
     int cnt=0;
     for(int i=2;i<=n;i++){
         if(!check[i]){
-            cnt++;
-            if(cnt%100==1){
-                primes.push_back(i);
-            }
+            primes.push_back(i);
         }
     }
-    for(auto x:primes) cout<<x<<nn;
+    //for(auto x:primes) cout<<x<<nn;
 }
 
  
