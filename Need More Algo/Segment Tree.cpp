@@ -7,56 +7,53 @@ using namespace std;
 
 #define mx 1000000
 
-vector<int>tree(mx*4);
-vector<int>vec(mx);
+int tree[mx*4];
+int arr[mx];
 
-void tree_create(int node,int ss, int ee){
-    if(ss==ee){
-        tree[node] = vec[ss];
+void tree_build(int node, int ls, int rs){
+    if(ls==rs){
+        tree[node] = arr[ls];
         return;
     }
     int left = node*2;
     int right = node*2+1;
+    int mid = (ls+rs)/2;
 
-    int mid = (ss+ee)/2;
-
-    tree_create(left,ss,mid);
-    tree_create(right,mid+1,ee);
+    tree_build(left,ls,mid);
+    tree_build(right,mid+1,rs);
     
-    tree[node] = tree[left]+tree[right];
+    tree[node] = tree[left]+tree[right]; // change
 }
 
-void tree_update(int node,int ss, int ee, int x, int val){
-    if(x<ss || ee<x) return;
-    if(ss==x){
-        tree[node] = vec[val];
+void tree_update(int node, int ls, int rs, int idx, int value){
+    if( idx<ls || rs<idx ) return;
+    if( ls==rs && ls==idx ){
+        tree[node] = value;
         return;
     }
     int left = node*2;
     int right = node*2+1;
+    int mid = (ls+rs)/2;
 
-    int mid = (ss+ee)/2;
-
-    tree_update(left,ss,mid,x,val);
-    tree_update(right,mid+1,ee,x,val);
+    tree_update(left,ls,mid,idx,value);
+    tree_update(right,mid+1,rs,idx,value);
     
-    tree[node] = tree[left]+tree[right];
+    tree[node] = tree[left]+tree[right]; //change
 }
 
 
-int tree_query(int node, int ss, int ee, int x, int y){
-    if(ss>y || ee<x) return 0;
-    if(ss>=x && ee<=y) return tree[node];
+int tree_query(int node, int ls, int rs, int x, int y){
+    if(ls>y || rs<x) return 0; //change
+    if(ls>=x && rs<=y) return tree[node];
     
     int left = node*2;
     int right = node*2+1;
+    int mid = (ls+rs)/2;
 
-    int mid = (ss+ee)/2;
-
-    int res1 = tree_query(left,ss, mid, x, y);
-    int res2 = tree_query(right, mid+1, ee, x, y);
+    int res1 = tree_query(left,ls, mid, x, y);
+    int res2 = tree_query(right, mid+1, rs, x, y);
     
-    return res1+res2;
+    return res1+res2; //change
 }
 
 // check int overflow
@@ -64,9 +61,9 @@ void solve(){
     int n;
     cin>>n;
 
-    for(int i=1;i<=n;i++) cin>>vec[i];
+    for(int i=1;i<=n;i++) cin>>arr[i];
 
-    tree_create(1,1,n);
+    tree_build(1,1,n);
     //change 5 th number to 10;
     tree_update(1,1,n,5,10);
 

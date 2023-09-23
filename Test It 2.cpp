@@ -1,78 +1,95 @@
 #include<bits/stdc++.h>
+using namespace std;
+
 typedef long long ll;
 typedef unsigned long long ull;
 #define nn "\n"
 #define mod 1000000007
-
-using namespace std;
-
-ll n;
-ll dp[101][100001];
-vector<ll>x(101),y(101),z(101);
-vector<ll>change,will_get;
-ll len,need;
-
-ll rec(ll idx, ll got){
-    // min transfer to get need amount of voter
-
-    if(idx==len){
-        if(got<need) return INT_MAX;
-        else return 0;
-    }
     
-    if(dp[idx][got]!=-1) return dp[idx][got];
+#define mx 1000000
 
-    ll ans = rec(idx+1,got);
+ll tree[mx*4];
+int arr[mx];
 
-    ans = min(ans, rec(idx+1, got+will_get[idx])+change[idx]);
+void tree_build(int node, int ls, int rs){
+    if(ls==rs){
+        tree[node] = arr[ls];
+        return;
+    }
+    int left = node*2;
+    int right = node*2+1;
+    int mid = (ls+rs)/2;
 
-    return dp[idx][got] = ans;
+    tree_build(left,ls,mid);
+    tree_build(right,mid+1,rs);
+    
+    tree[node] = tree[left]+tree[right]; // change
 }
 
-// check ll overflow
+void tree_update(int node, int ls, int rs, int idx, int value){
+    if( idx<ls || rs<idx ) return;
+    if( ls==rs && ls==idx ){
+        tree[node] = value;
+        return;
+    }
+    int left = node*2;
+    int right = node*2+1;
+    int mid = (ls+rs)/2;
+
+    tree_update(left,ls,mid,idx,value);
+    tree_update(right,mid+1,rs,idx,value);
+    
+    tree[node] = tree[left]+tree[right]; //change
+}
+
+
+ll tree_query(int node, int ls, int rs, int x, int y){
+    if(ls>y || rs<x) return 0; //change
+    if(ls>=x && rs<=y) return tree[node];
+    
+    int left = node*2;
+    int right = node*2+1;
+    int mid = (ls+rs)/2;
+
+    ll res1 = tree_query(left,ls, mid, x, y);
+    ll res2 = tree_query(right, mid+1, rs, x, y);
+    
+    return res1+res2; //change
+}
+
+
+// check int overflow
 void solve(){
-    cin>>n;
+    int n,q;
+    cin>>n>>q;
 
-    ll total=0;
-    ll have=0;
+    for(int i=1;i<=n;i++){
+        cin>>arr[i];
+    }
 
-    memset(dp,-1,sizeof dp);
+    tree_build(1,1,n);
 
-    for(ll i=0;i<n;i++){
-        cin>>x[i]>>y[i]>>z[i];
-        total+=z[i];
+    while(q--){
+        int type;
+        cin>>type;
 
-        if(x[i]>y[i]) have+=z[i];
+        if(type==1){
+            int idx, value;
+            cin>>idx>>value;
+
+            tree_update(1,1,n,idx+1,value);
+        }
         else{
-            ll dum = (x[i]+y[i]+1)/2 - x[i];
+            int l,r;
+            cin>>l>>r;
 
-            change.push_back(dum);
-            will_get.push_back(z[i]);
+            cout<<tree_query(1,1,n,l+1,r)<<nn;
         }
     }
+}   
 
-    // for(auto x:will_get) cout<<x<<" ";
-    // cout<<nn;
-
-    ll ans=0;
-
-    //cout<<total<<" "<<have<<nn;
-
-    if((total+1)/2>have){
-        need = (total+1)/2 - have;
-        len = (ll)change.size();
-        
-        ans = rec(0,0);
-    }
-
-    cout<<ans<<nn;
-}
-
- 
 int main()
 {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
 
     // freopen("reduce.in", "r", stdin);
     // freopen("reduce.out", "w", stdout);
