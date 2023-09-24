@@ -1,9 +1,10 @@
 #include<bits/stdc++.h>
+using namespace std;
+
 typedef long long ll;
 typedef unsigned long long ull;
 #define nn "\n"
 #define mod 1000000007
-using namespace std;
 
 #define mx 1000000
 
