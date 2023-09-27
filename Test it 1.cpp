@@ -9,26 +9,28 @@ typedef unsigned long long ull;
 #define mx 1000000
 
 ll tree[mx*4];
-ll lazy[mx*4];
-int arr[mx];
+ll prop[mx*4];
 
-void push(int node, int ls, int rs){ // change
-    tree[node]+= (rs-ls+1)*lazy[node];
-
+void push(int node, int ls, int rs){
     if(ls!=rs){
         int left = node*2;
         int right = node*2+1;
         int mid = (ls+rs)/2;
 
-        lazy[left] += lazy[node];
-        lazy[right] += lazy[node];
+        prop[left] += prop[node];
+        prop[right] += prop[node];
+
+        tree[left] += prop[node]*(mid-ls+1);
+        tree[right] += prop[node]*(rs-mid);
+
     }
-    lazy[node]=0;
+    prop[node]=0;
 }
 
 void tree_build(int node, int ls, int rs){
     if(ls==rs){
-        tree[node] = arr[ls];
+        tree[node] = 0;
+        prop[node] = 0;
         return;
     }
     int left = node*2;
@@ -46,7 +48,8 @@ void tree_update(int node, int ls, int rs, int l, int r, int value){
 
     if( r<ls || rs<l ) return;
     if(l<=ls && rs<=r){
-        lazy[node]+= value;
+        tree[node]+= (rs-ls+1)*value;
+        prop[node]+= value;
         return;
     }
     int left = node*2;
@@ -60,20 +63,20 @@ void tree_update(int node, int ls, int rs, int l, int r, int value){
 }
 
 
-ll tree_query(int node, int ls, int rs, int idx){
+ll tree_query(int node, int ls, int rs, int l, int r){
     push(node,ls,rs);
 
-    if(ls>idx || rs<idx) return 0ll; //change
-    if(ls==rs && ls==idx) return tree[node];
+    if(ls>r || rs<l) return 0ll; //change
+    if(ls<=l && r<=rs) return tree[node];
     
     int left = node*2;
     int right = node*2+1;
     int mid = (ls+rs)/2;
 
-    ll res1 = tree_query(left,ls, mid, idx);
-    ll res2 = tree_query(right, mid+1, rs, idx);
+    ll res1 = tree_query(left,ls, mid, l, r);
+    ll res2 = tree_query(right, mid+1, rs, l, r);
     
-    return res1+res2; //change
+    return max(res1,res2); //change
 }
 
 // check int overflow
@@ -98,7 +101,7 @@ void solve(){
             int l,r,value;
             cin>>l>>r>>value;
 
-            tree_update(1,1,n,l+1,r,value);
+            tree_update(1,1,n,l,r,value);
 
             // for(int i=1;i<=n;i++){
             //     cout<<tree_query(1,1,n,i)<<" ";
@@ -106,9 +109,9 @@ void solve(){
             // cout<<nn;
         }
         else{
-            int idx;
-            cin>>idx;
-            cout<<tree_query(1,1,n,idx+1)<<nn;
+            int l,r;
+            cin>>l>>r;
+            cout<<tree_query(1,1,n,l,r)<<nn;
         }
     }
 }   

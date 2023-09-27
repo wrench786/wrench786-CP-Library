@@ -13,7 +13,7 @@ ll lazy[mx*4];
 int arr[mx];
 
 void push(int node, int ls, int rs){ // change
-    tree[node]+= (rs-ls+1)*lazy[node];
+    tree[node]+= 1ll*(rs-ls+1)*lazy[node];
 
     if(ls!=rs){
         int left = node*2;
@@ -47,6 +47,7 @@ void tree_update(int node, int ls, int rs, int l, int r, int value){
     if( r<ls || rs<l ) return;
     if(l<=ls && rs<=r){
         lazy[node]+= value;
+        push(node, ls, rs);
         return;
     }
     int left = node*2;
