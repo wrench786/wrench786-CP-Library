@@ -13,6 +13,7 @@ ll lazy[mx*4];
 int arr[mx];
 
 void push(int node, int ls, int rs){ // change
+    // check for lazy[node] value???
     tree[node]+= 1ll*(rs-ls+1)*lazy[node];
 
     if(ls!=rs){
@@ -27,6 +28,7 @@ void push(int node, int ls, int rs){ // change
 }
 
 void tree_build(int node, int ls, int rs){
+    // lazy[node] = blah... if we want to change all lazy nodes value
     if(ls==rs){
         tree[node] = arr[ls];
         return;
