@@ -29,6 +29,7 @@ void push(int node, int ls, int rs){ // change
 
 void tree_build(int node, int ls, int rs){
     // lazy[node] = blah... if we want to change all lazy nodes value
+    lazy[node]=0; // check
     if(ls==rs){
         tree[node] = arr[ls];
         return;
