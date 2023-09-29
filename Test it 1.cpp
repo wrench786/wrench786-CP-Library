@@ -13,28 +13,29 @@ ll lazy[mx*4];
 int arr[mx];
 
 void push(int node, int ls, int rs){ // change
-    if(lazy[node]==0){
+    // check for lazy[node] value???
+    if(lazy[node]==-1){
         return;
     }
 
-    tree[node] = (lazy[node] * tree[node])%mod;
+    tree[node]= lazy[node]*(rs-ls+1);
 
     if(ls!=rs){
         int left = node*2;
         int right = node*2+1;
         int mid = (ls+rs)/2;
 
-        lazy[left] = (lazy[left] * lazy[node])%mod;
-        lazy[right] = (lazy[right] * lazy[node])%mod;
+        lazy[left] = lazy[node];
+        lazy[right] = lazy[node];
     }
-    lazy[node]=1;
+    lazy[node]=-1;
 }
 
 void tree_build(int node, int ls, int rs){
-    lazy[node]=1;
-    
+    // lazy[node] = blah... if we want to change all lazy nodes value
+    lazy[node]=-1;
     if(ls==rs){
-        tree[node] = 1;
+        tree[node] = arr[ls];
         return;
     }
     int left = node*2;
@@ -44,7 +45,7 @@ void tree_build(int node, int ls, int rs){
     tree_build(left,ls,mid);
     tree_build(right,mid+1,rs);
         
-    tree[node] = (tree[left]+tree[right])%mod; // change
+    tree[node] = tree[left]+tree[right]; // change
 }
 
 void tree_update(int node, int ls, int rs, int l, int r, int value){
@@ -52,7 +53,7 @@ void tree_update(int node, int ls, int rs, int l, int r, int value){
 
     if( r<ls || rs<l ) return;
     if(l<=ls && rs<=r){
-        lazy[node]*=value;
+        lazy[node] = value;
         push(node, ls, rs);
         return;
     }
@@ -63,7 +64,7 @@ void tree_update(int node, int ls, int rs, int l, int r, int value){
     tree_update(left,ls,mid,l,r,value);
     tree_update(right,mid+1,rs,l,r,value);
         
-    tree[node] = (tree[left]+tree[right])%mod; // change
+    tree[node] = tree[left]+tree[right]; //change
 }
 
 
@@ -77,10 +78,10 @@ ll tree_query(int node, int ls, int rs, int l, int r){
     int right = node*2+1;
     int mid = (ls+rs)/2;
 
-    ll res1 = tree_query(left,ls, mid, l,r);
+    ll res1 = tree_query(left,ls, mid, l, r);
     ll res2 = tree_query(right, mid+1, rs, l, r);
     
-    return (res1+res2)%mod; //change
+    return res1+res2; //change
 }
 
 // check int overflow

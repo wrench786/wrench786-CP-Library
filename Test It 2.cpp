@@ -6,44 +6,64 @@ typedef unsigned long long ull;
 #define nn "\n"
 #define mod 1000000007
 
-void solve(){   
-    ll n;
+const int N = 105+7;
+
+int spf[N];
+int arr[N];
+
+void precal(){
+
+    for(int i=1;i<N;i++) spf[i]=i;
+
+    for(int i=2;i*i<=N;i++){
+        for(int j = i+i;j<N;j+=i){
+            spf[j] = min(i,spf[j]);
+        }
+    }
+}
+
+void solve(){
+    int n;
     cin>>n;
 
-    vector<int>x(n),y(n);
-    int x_sum=0,y_sum=0;
+    int ans=0;
 
-    for(ll i=0;i<n;i++){
-        cin>>x[i]>>y[i];
-
-        x_sum+=x[i];
-        y_sum+=y[i];
+    vector<int>vec(n);
+    for(int i=0;i<n;i++){
+        cin>>vec[i];
     }
 
-    sort(x.begin(),x.end());
-    sort(y.begin(),y.end());
+    int yo=1;
+    set<int>gg;
 
-    int presum_x[n+1]={0};
-    int presum_y[n+1]={0};
+    for(int i=0;i<n;i++){
+        int x = vec[i];
 
-    for(int i=1;i<=n;i++){
-        presum_x[i] = presum_x[i-1]+x[i-1];
+        set<int>st;
+
+        while(x>1){
+            int p = spf[x];
+            while(x%p==0){
+                x/=p;
+            }
+            //cout<<p<<nn;
+            st.insert(p);
+        }
+        int par=0;
+
+        for(auto x:st){
+            if(arr[x]){
+                par = arr[x];
+                break;
+            }
+        }
+        if(par==0){
+            par=yo++;
+        }
+        
+        gg.insert(par);
     }
-    for(int i=1;i<=n;i++){
-        presum_y[i] = presum_y[i-1]+y[i-1];
-    }
-
-    int l = x[0],r = x[n-1],mid,ans=LLONG_MAX, xx;
-
-    while(l<=r){
-        mid = (l+r)/2;
-
-
-    }
-
-
-
-    cout<<x<<" "<<y<<nn;
+    cout<<gg.size()<<nn;
 }
  
 int main()
@@ -51,6 +71,7 @@ int main()
     ios_base::sync_with_stdio(0);
     cin.tie(0);
 
+    precal();
     // freopen("reduce.in", "r", stdin);
     // freopen("reduce.out", "w", stdout);
     int tc=1;

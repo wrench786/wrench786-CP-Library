@@ -63,18 +63,18 @@ void tree_update(int node, int ls, int rs, int l, int r, int value){
 }
 
 
-ll tree_query(int node, int ls, int rs, int idx){
+ll tree_query(int node, int ls, int rs, int l, int r){
     push(node,ls,rs);
 
-    if(ls>idx || rs<idx) return 0ll; //change
-    if(ls==rs && ls==idx) return tree[node];
+    if(ls>r || rs<l) return 0ll; //change
+    if(l<=ls && rs<=r) return tree[node];
     
     int left = node*2;
     int right = node*2+1;
     int mid = (ls+rs)/2;
 
-    ll res1 = tree_query(left,ls, mid, idx);
-    ll res2 = tree_query(right, mid+1, rs, idx);
+    ll res1 = tree_query(left,ls, mid, l, r);
+    ll res2 = tree_query(right, mid+1, rs, l, r);
     
     return res1+res2; //change
 }
@@ -109,9 +109,9 @@ void solve(){
             // cout<<nn;
         }
         else{
-            int idx;
-            cin>>idx;
-            cout<<tree_query(1,1,n,idx+1)<<nn;
+            int l,r;
+            cin>>l>>r;
+            cout<<tree_query(1,1,n,l+1,r)<<nn;
         }
     }
 }   
