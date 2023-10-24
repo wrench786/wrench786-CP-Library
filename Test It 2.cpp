@@ -5,65 +5,48 @@ typedef long long ll;
 typedef unsigned long long ull;
 #define nn "\n"
 #define mod 1000000007
+#define mod2 998244353
 
-const int N = 105+7;
+const int N = 2e5+7;
 
-int spf[N];
 int arr[N];
 
-void precal(){
-
-    for(int i=1;i<N;i++) spf[i]=i;
-
-    for(int i=2;i*i<=N;i++){
-        for(int j = i+i;j<N;j+=i){
-            spf[j] = min(i,spf[j]);
-        }
-    }
-}
-
 void solve(){
-    int n;
-    cin>>n;
+    int n,m;
+    cin>>n>>m;
 
-    int ans=0;
-
-    vector<int>vec(n);
-    for(int i=0;i<n;i++){
-        cin>>vec[i];
+    for(int i=1;i<=n;i++){
+        cin>>arr[i];
     }
 
-    int yo=1;
-    set<int>gg;
+    int brr[n+1]={0};
 
-    for(int i=0;i<n;i++){
-        int x = vec[i];
-
-        set<int>st;
-
-        while(x>1){
-            int p = spf[x];
-            while(x%p==0){
-                x/=p;
-            }
-            //cout<<p<<nn;
-            st.insert(p);
+    for(int i=1;i<=n-2;i++){
+        if(arr[i]>=arr[i+1] && arr[i+1]>=arr[i+2]){
+            brr[i]=1;
         }
-        int par=0;
+    }
 
-        for(auto x:st){
-            if(arr[x]){
-                par = arr[x];
-                break;
-            }
-        }
-        if(par==0){
-            par=yo++;
+    int presum[n+1]={0};
+
+    for(int i=1;i<=n;i++){
+        presum[i] = presum[i-1]+brr[i];
+    }
+
+    while(m--){
+        int l,r;
+        cin>>l>>r;
+
+        int ans = r-l+1;
+        int cnt = presum[r]-presum[l-1];
+
+        for(int i=r;i>=r-1 && i>=l;i--){
+            if(brr[i]) cnt--;
         }
         
-        gg.insert(par);
+        cout<<ans-cnt<<nn;
+
     }
-    cout<<gg.size()<<nn;
 }
  
 int main()
@@ -71,7 +54,6 @@ int main()
     ios_base::sync_with_stdio(0);
     cin.tie(0);
 
-    precal();
     // freopen("reduce.in", "r", stdin);
     // freopen("reduce.out", "w", stdout);
     int tc=1;
