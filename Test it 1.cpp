@@ -4,70 +4,52 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 #define nn "\n"
-#define mod 1000000007
-#define mod2 998244353
-
-const int inf = 1e9+7;
 
 void solve(){
-    int n,m;
-    cin>>n>>m;
+    string str;
+    cin>>str;
 
-    map<int,vector<int>>g;
-    for(int i=0;i<m;i++){
-        int u,v;
-        cin>>u>>v;
+    int n = str.size();
 
-        g[u].push_back(v);
-        g[v].push_back(u);
-    }
+    stack<char>st;
 
-    int start, end;
-    cin>>start>>end;
+    for(auto x:str){
+        if(x=='C'){
+            if(st.size()>=2){
+                char b = st.top();
+                st.pop();
+                char a = st.top();
+                st.pop();
+                //cout<<a<<" "<<b<<nn;
 
-    vector<int>d(n,inf);
-    queue<int>q;
-    d[start]=0;
-    q.push(start);
-
-    while(!q.empty()){
-        int u = q.front();
-        q.pop();
-
-        for(auto v:g[u]){
-            if(d[u]+1<d[v]){
-                d[v] = d[u]+1;
-                q.push(v);
+                if(a=='A' && b=='B') continue;
+                else{
+                    st.push(a);
+                    st.push(b);
+                    st.push('C');
+                }
+            }
+            else{
+                st.push(x);
             }
         }
-    }
-    int ans=0,idx;
-    for(int i=0;i<n;i++){
-        if(i!=start && i!=end){
-            idx = i;
-            ans = max(ans, d[i]);
-        }
-        d[i]=inf;
-    }
-    
-    d[idx]=0;
-    q.push(idx);
-
-    while(!q.empty()){
-        int u = q.front();
-        q.pop();
-
-        for(auto v:g[u]){
-            if(d[u]+1<d[v]){
-                d[v] = d[u]+1;
-                q.push(v);
-            }
+        else{
+            st.push(x);
         }
     }
-    ans+= d[end];
+    vector<char>vec;
 
-    cout<<ans<<nn;   
-}
+    while(!st.empty()){
+        char x = st.top();
+        vec.push_back(x);
+        st.pop();
+    }
+    reverse(vec.begin(),vec.end());
+    for(auto x:vec){
+        cout<<x;
+    }
+    cout<<nn;
+}   
  
 int main()
 {
@@ -77,11 +59,11 @@ int main()
     // freopen("reduce.in", "r", stdin);
     // freopen("reduce.out", "w", stdout);
     int tc=1;
-    cin>>tc;
-
-    int cases=0;
+    //cin>>tc;
+    
+    //int cases=0;
     while(tc--){
-        cout<<"Case "<<++cases<<":";
+        //cout<<"Case "<<++cases<<": ";
         solve();
     }
     return 0;

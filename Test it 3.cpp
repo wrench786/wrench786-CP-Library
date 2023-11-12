@@ -4,76 +4,97 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 #define nn "\n"
-#define mod 1000000007
 
-ll ans[1000007];
+const int N = 1e5+7;
+
+map<int,vector<pair<int,int>>>g;
+bool vis[N];
+ll depth[N], depth_start[N], depth_end[N];
+ll start,last,mx=0;
+
+void dfs(int u, int par, int ww){
+    vis[u] = true;
+    depth[u] = depth[par]+ww;
+    if(depth[u]>mx){
+        mx = depth[u];
+        start = u;
+    }
+
+    for(auto x:g[u]){
+        int v = x.first;
+        int w = x.second;
+
+        if(!vis[v]){
+            dfs(v,u,w);
+        }
+    }
+}
+
+void dfs2(int u, int par, int ww){
+    vis[u] = true;
+    depth_start[u] = depth_start[par]+ww;
+    //cout<<depth_start[u]<<nn;
+    if(depth_start[u]>mx){
+        mx = depth_start[u];
+        last = u;
+    }
+    for(auto x:g[u]){
+        // cout<<"sd"<<nn;
+        int v = x.first;
+        int w = x.second;
+
+        if(!vis[v]){
+            dfs2(v,u,w);
+        }
+    }
+}
+
+void dfs3(int u, int par, int ww){
+    vis[u] = true;
+    depth_end[u] = depth_end[par]+ww;
+
+    for(auto x:g[u]){
+        int v = x.first;
+        int w = x.second;
+
+        if(!vis[v]){
+            dfs3(v,u,w);
+        }
+    }
+}
 
 void solve(){
-    ll n,p;
-    cin>>n>>p;
+    int n;
+    cin>>n;
 
-    //cout<<n<<" "<<p<<nn;
+    g.clear();
+    memset(vis,0,sizeof vis);
+    memset(depth,0,sizeof depth);
+    memset(depth_start,0,sizeof depth_start);
+    memset(depth_end,0,sizeof depth_end);
 
-    //cout<<n<<" "<<p<<nn;
+    for(int i=1;i<n;i++){
+        int u,v,w;
+        cin>>u>>v>>w;
 
-    vector<pair<ll,ll>>vec(n);
-
-    vector<ll>a(n),b(n);
-    for(ll i=0;i<n;i++){
-        cin>>a[i];
+        g[u].push_back({v,w});
+        g[v].push_back({u,w});
     }
-    for(ll i=0;i<n;i++){
-        cin>>b[i];
 
-        vec[i] = {b[i],a[i]};
-    }
-    sort(vec.begin(),vec.end());
+    dfs(1,0,0);
 
-    for(ll i=0,j=1;i<n;i++){
-        ll len = vec[i].second;
-        ll cost = vec[i].first;
-
-        if(j==n) break;
-        while(len){
-            ans[j++] = cost;
-            len--;
-            if(j==n) break;
-        }
-        if(j==n) break;
-    }
-    // for(ll i=0;i<n;i++){
-    //     cout<<ans[i]<<" ";
-    // }
-    // cout<<nn;
-
-    //cout<<n<<" "<<p<<nn;
-
-    // ll total = p;
-    // for(int i=1;i<n;i++){
-    //     total+= ans[i];
-    // }
-
-
-    // ll sum=0;
-    // ll dum_total = total;
-    // for(int i=n-1;i>=1;i--){
-    //     sum+= ans[i];
-
-    //     ll dum = dum_total - sum + (n-i)*p;
-    //     total = min(total,dum);
-    // }
-
-    //cout<<total<<nn;
+    memset(vis,0,sizeof vis);
+    mx=0;
+    dfs2(start,0,0);
     
+    memset(vis,0,sizeof vis);
+    dfs3(last,0,0);
 
-    ans[0] = p;
-    ll res=p;
-    for(ll i=1;i<n;i++){
-        ans[i] = min(ans[i],(i+1)*p);
-        res+= 1ll*ans[i];
+    for(int i=1;i<=n;i++){
+        if(i>1) cout<<" ";
+        cout<<max(depth_start[i],depth_end[i]);
     }
-    cout<<res<<nn;
-
+    cout<<nn;
 }
  
 int main()
@@ -88,7 +109,7 @@ int main()
     
     //int cases=0;
     while(tc--){
-        //cout<<"Case "<<++cases<<":"<<nn;
+        //cout<<"Case "<<++cases<<": ";
         solve();
     }
     return 0;
