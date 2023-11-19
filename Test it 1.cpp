@@ -5,51 +5,55 @@ typedef long long ll;
 typedef unsigned long long ull;
 #define nn "\n"
 
+
 void solve(){
-    string str;
-    cin>>str;
+    int n;
+    cin>>n;
 
-    int n = str.size();
-
-    stack<char>st;
-
-    for(auto x:str){
-        if(x=='C'){
-            if(st.size()>=2){
-                char b = st.top();
-                st.pop();
-                char a = st.top();
-                st.pop();
-                //cout<<a<<" "<<b<<nn;
-
-                if(a=='A' && b=='B') continue;
-                else{
-                    st.push(a);
-                    st.push(b);
-                    st.push('C');
-                }
-            }
-            else{
-                st.push(x);
-            }
-        }
-        else{
-            st.push(x);
-        }
-    }
-    vector<char>vec;
-
-    while(!st.empty()){
-        char x = st.top();
-        vec.push_back(x);
-        st.pop();
+    vector<int>vec(n);
+    for(int i=0;i<n;i++){
+        cin>>vec[i];
     }
     reverse(vec.begin(),vec.end());
-    for(auto x:vec){
-        cout<<x;
+    int mn=vec[0];
+
+    //cout<<mn<<nn;
+    int ans=0;
+    for(int i=1;i<n;i++){
+        int num = vec[i];
+        if(num<mn){
+            mn = num;
+        }
+        else if(num>mn){
+            stack<int>q;
+            q.push(num);
+            map<int,int>mp;
+
+            bool flag=0;
+            while(!q.empty()){
+                int x = q.top();
+                q.pop();
+
+                if(x>mn){
+                    ans++;
+                    int a = x/2;
+                    int b = x-a;
+
+                    if(!mp[a]){
+                        q.push(a);
+                        mp[a]=1;
+                    }
+                    q.push(b);
+
+                }   
+                else{
+                    mn = min(mn, x);
+                }
+            }
+        }
     }
-    cout<<nn;
-}   
+    cout<<ans<<nn;
+}
  
 int main()
 {
@@ -59,7 +63,7 @@ int main()
     // freopen("reduce.in", "r", stdin);
     // freopen("reduce.out", "w", stdout);
     int tc=1;
-    //cin>>tc;
+    cin>>tc;
     
     //int cases=0;
     while(tc--){

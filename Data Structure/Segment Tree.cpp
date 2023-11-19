@@ -6,7 +6,7 @@ typedef unsigned long long ull;
 #define nn "\n"
 #define mod 1000000007
 
-#define mx 1000000
+const int mx = 1000000;
 
 int tree[mx*4];
 int arr[mx];

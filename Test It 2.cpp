@@ -5,47 +5,30 @@ typedef long long ll;
 typedef unsigned long long ull;
 #define nn "\n"
 
-const int p1 = 137, p2 = 269, mod1 = 999999989, mod2 = 987654319;
-const int N = 1e5+7;
-
-int pw1[N], pw2[N];
-
-void precal(){
-    pw1[0]=1;
-    for(int i=1;i<N;i++){
-        pw1[i] = 1ll * pw1[i-1] * p1 % mod1;
-    }
-    pw2[0]=1;
-    for(int i=1;i<N;i++){
-        pw2[i] = 1ll * pw2[i-1] * p2 % mod2;
-    }
-}
-
-pair<int,int> string_hash(string str){
-    int n = str.size();
-    int hs1 = 0, hs2 = 0;
-
-    for(int i=0;i<n;i++){
-        hs1 += 1ll * str[i] * pw1[i] % mod1;
-        hs1 %= mod1;
-    }
-    for(int i=0;i<n;i++){
-        hs2 += 1ll * str[i] * pw2[i] % mod2;
-        hs2 %= mod2;
-    }
-    return {hs1,hs2};
-}
-
 void solve(){
-    string a,b;
-    cin>>a>>b;
+    string str;
+    cin>>str;
 
-    pair<int,int>aa = string_hash(a);
-    pair<int,int>bb = string_hash(b);
+    int arr[26]={0};
+    for(int i=0;i<(int)str.size()-1;i++){
+        if(str[i]==str[i+1]){
+            arr[str[i]-'a']++;
+            if(i+2<(int)str.size()){
+                arr[str[i+2]-'a']++;
+            }
+            for(int j=0;j<26;j++){
+                if(!arr[j]){
+                    str[i+1] = 'a'+j;
+                    break;
+                }
+            }
 
-    if(aa.first==bb.first && aa.second == bb.second) cout<<1<<nn;
-    else cout<<0<<nn;
-
+            for(int j=0;j<26;j++){
+                arr[j]=0;
+            }
+        }
+    }
+    cout<<str<<nn;
 }
  
 int main()
@@ -53,7 +36,6 @@ int main()
     ios_base::sync_with_stdio(0);
     cin.tie(0);
 
-    precal();
     // freopen("reduce.in", "r", stdin);
     // freopen("reduce.out", "w", stdout);
     int tc=1;

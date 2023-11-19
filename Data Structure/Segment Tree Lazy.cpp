@@ -4,9 +4,8 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 #define nn "\n"
-#define mod 1000000007
 
-#define mx 1000000
+const int mx = 1000000
 
 ll tree[mx*4];
 ll lazy[mx*4];

@@ -5,96 +5,59 @@ typedef long long ll;
 typedef unsigned long long ull;
 #define nn "\n"
 
-const int N = 1e5+7;
-
-map<int,vector<pair<int,int>>>g;
-bool vis[N];
-ll depth[N], depth_start[N], depth_end[N];
-ll start,last,mx=0;
-
-void dfs(int u, int par, int ww){
-    vis[u] = true;
-    depth[u] = depth[par]+ww;
-    if(depth[u]>mx){
-        mx = depth[u];
-        start = u;
-    }
-
-    for(auto x:g[u]){
-        int v = x.first;
-        int w = x.second;
-
-        if(!vis[v]){
-            dfs(v,u,w);
-        }
-    }
-}
-
-void dfs2(int u, int par, int ww){
-    vis[u] = true;
-    depth_start[u] = depth_start[par]+ww;
-    //cout<<depth_start[u]<<nn;
-    if(depth_start[u]>mx){
-        mx = depth_start[u];
-        last = u;
-    }
-    for(auto x:g[u]){
-        // cout<<"sd"<<nn;
-        int v = x.first;
-        int w = x.second;
-
-        if(!vis[v]){
-            dfs2(v,u,w);
-        }
-    }
-}
-
-void dfs3(int u, int par, int ww){
-    vis[u] = true;
-    depth_end[u] = depth_end[par]+ww;
-
-    for(auto x:g[u]){
-        int v = x.first;
-        int w = x.second;
-
-        if(!vis[v]){
-            dfs3(v,u,w);
-        }
-    }
-}
 
 void solve(){
     int n;
     cin>>n;
 
-    g.clear();
-    memset(vis,0,sizeof vis);
-    memset(depth,0,sizeof depth);
-    memset(depth_start,0,sizeof depth_start);
-    memset(depth_end,0,sizeof depth_end);
+    vector<int>vec(n);
+    for(int i=0;i<n;i++){
+        cin>>vec[i];
+    }
+    reverse(vec.begin(),vec.end());
+    int mn=vec[0];
 
+    //cout<<mn<<nn;
+    int ans=0;
     for(int i=1;i<n;i++){
-        int u,v,w;
-        cin>>u>>v>>w;
+        int num = vec[i];
+        if(num<mn){
+            mn = num;
+        }
+        else if(num>mn){
+            stack<int>q;
+            q.push(num);
 
-        g[u].push_back({v,w});
-        g[v].push_back({u,w});
+            map<int,int>mp;
+            mp[num]=1;
+
+            int yo = num;
+            while(!q.empty()){
+                int x = q.top();
+                q.pop();
+
+                if(x>mn){
+                    int curr = mp[x];
+                    mp[x]=0;
+                    ans+= curr;
+
+                    int a = x/2;
+                    int b = x-a;
+
+                    yo = min(yo,a);
+                    yo = min(yo,b);
+
+                    mp[a]+= curr;
+                    mp[b]+= curr;
+                    q.push(a);
+                    q.push(b);
+
+                }   
+            }
+            mn = min(mn, yo);
+        }
     }
-
-    dfs(1,0,0);
-
-    memset(vis,0,sizeof vis);
-    mx=0;
-    dfs2(start,0,0);
-    
-    memset(vis,0,sizeof vis);
-    dfs3(last,0,0);
-
-    for(int i=1;i<=n;i++){
-        if(i>1) cout<<" ";
-        cout<<max(depth_start[i],depth_end[i]);
-    }
-    cout<<nn;
+    cout<<ans<<nn;
 }
  
 int main()
