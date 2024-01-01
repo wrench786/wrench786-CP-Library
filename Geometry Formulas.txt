@@ -1,0 +1,17 @@
+# give the distance x from center to edge of a regular n-polygon, what is the area of n-polygon?
+//divide the polygon by n, we get a triangle
+// center of polygon(fig)
+//     /|\
+//    / | \
+//   /  |  \	 x
+// /_h|__\
+//   	  right-lombo
+// the angle with the center will be 360/n/2,
+//  sin(theta) = lombo/x;
+//  x*sin(theta) = lombo;
+//  x*cos(theta) = h (same);
+area = 1/2 * (lombo+lombo (full vumi)) * h
+full area of n-gon = area*n;
+
+
+# 
