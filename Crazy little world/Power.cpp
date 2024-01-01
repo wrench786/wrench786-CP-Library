@@ -17,6 +17,15 @@ int power(ll base, ll expo, ll mod=1e9+7){
     }
 }
 
+// this one is not tested
+int power(ll base, ll expo, ll mod=1e9+7){
+    int ans = 1;
+    while(expo>0){
+        if(expo%2==0) ans = 1ll*ans*base%mod;
+
+    }
+}
+
 void solve(){
 }
  

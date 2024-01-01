@@ -1,42 +1,49 @@
-#include <bits/stdc++.h>
-#define wrench786 ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
-#define ll long long
-#define PI (acos(-1.0))
-#define LIMIT 1000007
-#define pb push_back
-#define dot(x) fixed<<setprecision(x)
+#include<bits/stdc++.h>
 using namespace std;
 
-bool not_prime[LIMIT+1];
+typedef long long ll;
+typedef unsigned long long ull;
+#define nn "\n"
 
+const int N = 1e6+7;
+bool not_prime[N];
+vector<int>primes;
 void sieve(){
-    ll int i,j;
-    not_prime[0] = true;
-    not_prime[1] = true;
-    for(i=4;i<=LIMIT;i+=2){
-        not_prime[i] = true;
-    }
-    for(i=3;i*i<=LIMIT;i+=2){
+    not_prime[1]=1;
+
+    for(int i=2;i*i<=N;i++){
         if(!not_prime[i]){
-            for(j=i*i;j<=LIMIT;j+=2*i){
-                not_prime[j] = true;
+            for(int j=i+i;j<N;j+=i){
+                not_prime[j]=1;
             }
         }
     }
+    // for(int i=1;i<=100;i++){
+    //     if(!not_prime[i]) cout<<i<<nn;
+    // }
+    for(int i=1;i<N;i++){
+        if(!not_prime[i]) primes.push_back(i);
+    }
 }
 
-int main(){
-    wrench786
+void solve(){
+}
  
-#ifndef ONLINE_JUDGE
-    clock_t tStart = clock();
-    freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
-#endif
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
 
     sieve();
+    // freopen("reduce.in", "r", stdin);
+    // freopen("reduce.out", "w", stdout);
+    int tc=1;
+    //cin>>tc;
     
-#ifndef ONLINE_JUDGE
-    fprintf(stderr, "\n>> Runtime: %.10fs\n", (double) (clock() - tStart) / CLOCKS_PER_SEC);
-#endif
-
+    //int cases=0;
+    while(tc--){
+        //cout<<"Case "<<++cases<<": ";
+        solve();
+    }
+    return 0;
 }

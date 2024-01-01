@@ -6,10 +6,14 @@ typedef unsigned long long ull;
 #define nn "\n"
 #define mod 1000000007
 
-const int mx = 1000000;
+const int mx = 1e6;
 
 int tree[mx*4];
 int arr[mx];
+
+int merge(int left, int right){
+    return left+right;
+}
 
 void tree_build(int node, int ls, int rs){
     if(ls==rs){
@@ -23,7 +27,7 @@ void tree_build(int node, int ls, int rs){
     tree_build(left,ls,mid);
     tree_build(right,mid+1,rs);
     
-    tree[node] = tree[left]+tree[right]; // change
+    tree[node] = merge(tree[left],tree[right]); // change
 }
 
 void tree_update(int node, int ls, int rs, int idx, int value){
@@ -39,7 +43,7 @@ void tree_update(int node, int ls, int rs, int idx, int value){
     tree_update(left,ls,mid,idx,value);
     tree_update(right,mid+1,rs,idx,value);
     
-    tree[node] = tree[left]+tree[right]; //change
+    tree[node] = merge(tree[left],tree[right]); //change
 }
 
 
@@ -54,7 +58,7 @@ int tree_query(int node, int ls, int rs, int x, int y){
     int res1 = tree_query(left,ls, mid, x, y);
     int res2 = tree_query(right, mid+1, rs, x, y);
     
-    return res1+res2; //change
+    return merge(res1,res2); //change
 }
 
 // check int overflow

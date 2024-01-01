@@ -5,6 +5,7 @@ typedef long long ll;
 typedef unsigned long long ull;
 #define nn "\n"
 
+// Check N and init precal in the main and build the sting
 const int p1 = 137, p2 = 269, mod1 = 999999937, mod2 = 987654319;
 const int N = 1e5+7;
 
@@ -53,7 +54,7 @@ void build_string(string s){
 }
 
 pair<int,int> substring_hash(int i, int j){
-    assert(i<=j);
+    //assert(i<=j);
  
     pair<int,int>hs ({0,0});
 

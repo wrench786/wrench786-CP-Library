@@ -5,7 +5,7 @@ typedef long long ll;
 typedef unsigned long long ull;
 #define nn "\n"
 
-const int mx = 1000000
+const int mx = 1e6+7;
 
 ll tree[mx*4];
 ll lazy[mx*4];
@@ -26,6 +26,10 @@ void push(int node, int ls, int rs){ // change
     lazy[node]=0;
 }
 
+ll merge(ll left, ll right){
+    return left+right;
+}
+
 void tree_build(int node, int ls, int rs){
     // lazy[node] = blah... if we want to change all lazy nodes value
     lazy[node]=0; // check
@@ -40,7 +44,7 @@ void tree_build(int node, int ls, int rs){
     tree_build(left,ls,mid);
     tree_build(right,mid+1,rs);
         
-    tree[node] = tree[left]+tree[right]; // change
+    tree[node] = merge(tree[left],tree[right]); // change
 }
 
 void tree_update(int node, int ls, int rs, int l, int r, int value){
@@ -59,7 +63,7 @@ void tree_update(int node, int ls, int rs, int l, int r, int value){
     tree_update(left,ls,mid,l,r,value);
     tree_update(right,mid+1,rs,l,r,value);
         
-    tree[node] = tree[left]+tree[right]; //change
+    tree[node] = merge(tree[left],tree[right]); //change
 }
 
 
@@ -76,7 +80,7 @@ ll tree_query(int node, int ls, int rs, int l, int r){
     ll res1 = tree_query(left,ls, mid, l, r);
     ll res2 = tree_query(right, mid+1, rs, l, r);
     
-    return res1+res2; //change
+    return merge(res1,res2); //change
 }
 
 // check int overflow
