@@ -5,88 +5,47 @@ typedef long long ll;
 typedef unsigned long long ull;
 #define nn "\n"
 
-const int mx = 1e6+7;
-
-int tree[mx*4];
-int arr[mx];
-
-int merge(int left, int right){
-    return left+right;
-}
-
-void tree_build(int node, int ls, int rs){
-    if(ls==rs){
-        tree[node] = 0;
-        return;
-    }
-    int left = node*2;
-    int right = node*2+1;
-    int mid = (ls+rs)/2;
-
-    tree_build(left,ls,mid);
-    tree_build(right,mid+1,rs);
-    
-    tree[node] = merge(tree[left],tree[right]); // change
-}
-
-void tree_update(int node, int ls, int rs, int idx){
-    if( idx<ls || rs<idx ) return;
-    if( ls==rs && ls==idx ){
-        tree[node]++;
-        return;
-    }
-    int left = node*2;
-    int right = node*2+1;
-    int mid = (ls+rs)/2;
-
-    tree_update(left,ls,mid,idx);
-    tree_update(right,mid+1,rs,idx);
-    
-    tree[node] = merge(tree[left],tree[right]); //change
-}
-
-
-int tree_query(int node, int ls, int rs, int x, int y){
-    if(ls>y || rs<x) return 0; //change
-    if(ls>=x && rs<=y) return tree[node];
-    
-    int left = node*2;
-    int right = node*2+1;
-    int mid = (ls+rs)/2;
-
-    int res1 = tree_query(left,ls, mid, x, y);
-    int res2 = tree_query(right, mid+1, rs, x, y);
-    
-    return merge(res1,res2); //change
-}
+const int N = 1e6+7;
 
 void solve(){
-    int n;
-    cin>>n;
+    int n,k;
+    cin>>n>>k;
 
-    vector<int>vec(n+1);
-    set<int>st;
-    for(int i=1;i<=n;i++){
-        cin>>vec[i];
-        st.insert(vec[i]);
-    }
-    int id=0;
-    map<int,int>mp;
+    vector<int> arr[k+10];
 
-    for(auto x:st){
-        mp[x] = ++id;
-    }
     for(int i=1;i<=n;i++){
-        vec[i] = mp[vec[i]];
+        int x;
+        cin>>x;
+
+        arr[x].push_back(i);
     }
 
-    tree_build(1,1,n);
+    int ans = n;
+    for(int i=1;i<=k;i++){
+        int a=0,b=0,prev=0;
 
-    ll ans=0;
-    for(int i=1;i<=n;i++){
-        int x = vec[i];
-        if(x<n) ans+= 1ll*tree_query(1,1,n,x+1,n);
-        tree_update(1,1,n,x);
+        if(!(int)arr[i].size())continue;
+        for(int j=0;j<(int)arr[i].size();j++){
+            int diff = arr[i][j]-prev-1;
+            if(diff>=a){
+                int tmp = a;
+                a = diff;
+                diff = tmp;
+            }
+            if(diff>=b) b = diff;
+            prev = arr[i][j];
+        }
+        if(arr[i][(int)arr[i].size()-1]!=n){
+            int diff = n-prev;
+            if(diff>=a){
+                int tmp = a;
+                a = diff;
+                diff = tmp;
+            }
+            if(diff>=b) b = diff;
+        }        
+        a/=2;
+        ans = min(ans, max(a,b));
     }
     cout<<ans<<nn;
 }

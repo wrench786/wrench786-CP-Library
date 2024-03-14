@@ -5,63 +5,33 @@ typedef long long ll;
 typedef unsigned long long ull;
 #define nn "\n"
 
-const int N = 1e5,inf = 1e5;
-
-int segment[N], arr[N];
-int n;
-
-void precal(){
-    int segment_size = sqrt(n);
-    int segment_no=-1;
-
-    for(int i=0;i<n;i++){
-        if(i%segment_size==0) segment_no++;
-        segment[segment_no] = max(segment[segment_no] , arr[i]);
-    }
-}
-
-int query(int l, int r){
-    int mx=0;
-    int segment_size = sqrt(n);
-
-    // left fraction
-    while(l<=r && l%segment_size!=0){
-        mx = max(mx,arr[l++]);
-    }
-
-    // full segment if needed
-    while(l+segment_size-1<=r){
-        mx = max(mx, segment[l/segment_size]);
-        l+= segment_size;
-    }
-    // right fraction
-    while(l<=r){
-        mx = max(mx,arr[l++]);
-    }
-    return mx;
-}
-
 void solve(){
-    int m;
-    cin>>m;
+    int n;
+    cin>>n;
 
-    int x;
-    n=-1;
-    while(cin>>x && x!=-1){
-        arr[++n] = x;
+    string s,t;
+    cin>>s>>t;
+
+    string gg = s[0]+t;
+
+    int ans = 1;
+
+    for(int i=1;i<n;i++){
+        if(gg[i]!=s[i]){
+            if(s[i]=='1'){
+                break;
+            }
+            else{
+                gg[i] = s[i];
+                ans=1;
+            }
+        }
+        else{
+            ans++;
+        }
     }
-    n++;
-
-    // for(int i=0;i<n;i++){
-    //     cout<<arr[i]<<" ";
-    // }
-    // cout<<nn;
-
-    precal();
-
-    for(int i=0;i+m-1<n;i++){
-        cout<<query(i,i+m-1)<<nn;
-    }
+    cout<<gg<<nn;
+    cout<<ans<<nn;
 }
  
 int main()
@@ -72,11 +42,11 @@ int main()
     // freopen("reduce.in", "r", stdin);
     // freopen("reduce.out", "w", stdout);
     int tc=1;
-    //cin>>tc;
+    cin>>tc;
     
     //int cases=0;
     while(tc--){
-        //cout<<"Case "<<++cases<<":\n";
+        //cout<<"Case "<<++cases<<": ";
         solve();
     }
     return 0;

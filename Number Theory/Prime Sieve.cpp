@@ -18,9 +18,6 @@ void sieve(){
             }
         }
     }
-    // for(int i=1;i<=100;i++){
-    //     if(!not_prime[i]) cout<<i<<nn;
-    // }
     for(int i=1;i<N;i++){
         if(!not_prime[i]) primes.push_back(i);
     }
