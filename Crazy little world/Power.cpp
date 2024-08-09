@@ -8,22 +8,23 @@ typedef unsigned long long ull;
 int power(ll base, ll expo, ll mod=1e9+7){
     if(expo==0) return 1;
 
-    int p1 = power(base, expo / 2, mod);
-    if(expo % 2 == 0){
-        return 1ll * p1 * p1 % mod;
+    int res = power(base, expo / 2, mod);
+    res = (1ll * res * res) % mod;
+    if(expo % 2){
+        res = ( 1ll * res * base) % mod;
     }
-    else{
-        return (1ll * p1 * p1) % mod * base % mod;
-    }
+    return res;
 }
 
-// this one is not tested
+// this one is done but not tested
 int power(ll base, ll expo, ll mod=1e9+7){
-    int ans = 1;
-    while(expo>0){
-        if(expo%2==0) ans = 1ll*ans*base%mod;
-
+    int res = 1;
+    while(expo){
+        if(expo%2==1) res = (1ll * res * base)%mod;
+        base = (1ll * base * base)%mod;
+        expo/=2;
     }
+    return res;
 }
 
 void solve(){
